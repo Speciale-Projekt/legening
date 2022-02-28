@@ -8304,8 +8304,6 @@ static void check_crash_handling(void) {
 
          "    echo core >/proc/sys/kernel/core_pattern\n");
 
-    if (!getenv("AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES"))
-      FATAL("Pipe at the beginning of 'core_pattern'");
 
   }
 
@@ -8367,7 +8365,6 @@ static void check_cpu_governor(void) {
        "    to make afl-fuzz skip this check - but expect some performance drop.\n",
        min / 1024, max / 1024);
 
-  FATAL("Suboptimal CPU scaling governor");
 
 }
 
@@ -8984,10 +8981,13 @@ int main(int argc, char** argv) {
           extract_response_codes = &extract_response_codes_sip;
         } else if (!strcmp(optarg, "HTTP")) {
           extract_requests = &extract_requests_http;
-          extract_response_codes = &extract_response_codes_http;
+            extract_response_codes = &extract_response_codes_http;
         } else if (!strcmp(optarg, "IPP")) {
           extract_requests = &extract_requests_ipp;
           extract_response_codes = &extract_response_codes_ipp;
+        } else if (!strcmp(optarg, "OWN")) {
+            extract_requests = &extract_requests_own_proto;
+            extract_response_codes = &extract_response_codes_own_proto;
         } else {
           FATAL("%s protocol is not supported yet!", optarg);
         }
